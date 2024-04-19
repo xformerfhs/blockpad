@@ -55,13 +55,13 @@ It has one of the following values:
 | `ISO78164`          | [ISO 7816-4](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO/IEC_7816-4) padding (ISO 9797-1 method 2)         |
 | `ArbitraryTailByte` | [Arbitrary tail byte padding](https://eprint.iacr.org/2003/098.pdf)                                                     |
 
-[!CAUTION]
+> [!CAUTION]
 > With CBC mode, nearly all the padding methods enable a very dangerous attack, the so-called padding oracle.
 > They must only be used with integrity protection, e.g. by an [HMAC](https://en.wikipedia.org/wiki/HMAC).
 > Only arbitrary tail byte padding is not susceptible to this attack.
 > An integrity protection is **always** advisable.
 
-[!CAUTION]
+> [!CAUTION]
 > When using Zero padding the clear data **must not** end with a 0 byte.
 > Zero padding will panic if the clear data ends with a 0 byte.
 
