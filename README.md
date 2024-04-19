@@ -164,4 +164,4 @@ Frank Schwab ([Mail](mailto:github.sfdhi@slmails.com "Mail"))
 
 ## License
 
-This source code is published under the [Apache License V2](https:www.apache.org/licenses/LICENSE-2.0.txt).
+This source code is published under the [Apache License V2](https://www.apache.org/licenses/LICENSE-2.0.txt).
