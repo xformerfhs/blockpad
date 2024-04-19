@@ -42,11 +42,7 @@
 //
 //		  encrypter := cipher.NewCBCEncrypter(aesCipher, iv)
 //
-//	     var padder blockPad.BlockPad
-//		  padder, err = NewBlockPadding(blockpad.ArbitraryTailByte, aes.BlockSize)
-//		  if err != nil {
-//		    return nil, err
-//		  }
+//		  padder := NewBlockPadding(blockpad.ArbitraryTailByte, aes.BlockSize)
 //
 //	     var paddedData []byte
 //		  paddedData, err = padder.Pad(clearData)

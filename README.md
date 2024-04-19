@@ -105,11 +105,7 @@ func doEncryption(key []byte, iv []byte, clearData []byte) ([]byte, error) {
    }
 	
    // 4. Pad clear data.
-   var paddedData []byte
-   paddedData, err = padder.Pad(clearData)
-   if err != nil {
-      return nil, err
-   }
+   paddedData := padder.Pad(clearData)
 
    // 5. Encrypt padded data.
    // After this, paddedData contains the encrypted padded data.
