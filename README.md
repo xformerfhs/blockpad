@@ -63,7 +63,7 @@ It has one of the following values:
 
 > [!CAUTION]
 > When using Zero padding the clear data **must not** end with a 0 byte.
-> Zero padding will panic if the clear data ends with a 0 byte.
+> Zero padding panics if the clear data ends with a 0 byte.
 
 This padder has two public function:
 
