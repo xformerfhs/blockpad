@@ -23,7 +23,7 @@ This process is called [padding](https://en.wikipedia.org/wiki/Padding_(cryptogr
 Nowadays, usually [AEAD](https://en.wikipedia.org/wiki/Authenticated_encryption) modes are used, which have built-in integrity protection.
 The corresponding modes are referred to as [CCM](https://en.wikipedia.org/wiki/CCM_mode), [EAX](https://en.wikipedia.org/wiki/EAX_mode) , [GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode), [OCB](https://en.wikipedia.org/wiki/OCB_mode) or [SIV](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Synthetic_initialization_vector_(SIV)).
 These have the advantage that it is not necessary to implement an additional integrity protection.
-Attacks such as a [padding oracle]((https://en.wikipedia.org/wiki/Padding_oracle_attack)) are not possible with these modes.
+Attacks such as a [padding oracle](https://en.wikipedia.org/wiki/Padding_oracle_attack) are not possible with these modes.
 However, the classic modes with additional integrity protection, e.g. through HMACs, are still justified as they are cryptographically more secure than the AEAD modes.
 Also, the AEAD modi are sometimes just not feasible, as they can not chain data.
 
