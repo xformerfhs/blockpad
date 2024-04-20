@@ -141,7 +141,7 @@ func main() {
    }
 
    // 5. Check result.
-   if bytes.Compare(data, decryptedData) == 0 {
+   if bytes.Equal(data, decryptedData) {
       log.Print(`Success!`)
    } else {
       log.Fatalf(`Decrypted data '%02x' does not match clear data '%02x'`, decryptedData, data)
