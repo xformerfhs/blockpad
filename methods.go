@@ -29,7 +29,7 @@
 package blockpad
 
 import (
-	"padding/internal/slicehelper"
+	"github.com/xformerfhs/blockpad/internal/slicehelper"
 )
 
 // ******** This file contains the publicly callable functions, i.e. the interface ********

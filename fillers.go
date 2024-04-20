@@ -30,8 +30,8 @@ package blockpad
 
 import (
 	"crypto/rand"
+	"github.com/xformerfhs/blockpad/internal/slicehelper"
 	mrand "math/rand"
-	"padding/internal/slicehelper"
 )
 
 // ******** This file contains the private padding fillers ********
