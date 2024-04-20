@@ -82,7 +82,7 @@ There are two reasons for this:
 
 ## Example
 
-In this example a very simple main program calls one encryption and one decryption function.
+In this example a very simple main program calls an encryption and a decryption function.
 It shows how a block cipher and a padder would typically be used for encryption and decryption.
 
 ```go
