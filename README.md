@@ -1,6 +1,6 @@
 # blockpad
 
-Package blockpad implements functions for block cipher paddings.
+A [Go](https://go.dev) package for block cipher paddings.
 
 ## Introduction
 
