@@ -82,6 +82,9 @@
 //    // 4. Decrypt the encrypted data.
 //    var decryptedData []byte
 //    decryptedData, err = doDecryption(aesCipher, iv, padder, encryptedData)
+//    if err != nil {
+//       log.Fatalf(`Decryption failed: %v`, err)
+//    }
 //
 //    // 5. Check result.
 //    if bytes.Compare(data, decryptedData) == 0 {
