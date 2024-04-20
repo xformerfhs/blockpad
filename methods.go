@@ -52,7 +52,6 @@ func NewBlockPadding(padAlgorithm PadAlgorithm, blockSize int) (*BlockPad, error
 // ******** Public functions ********
 
 // Pad pads a byte slice.
-
 func (pb *BlockPad) Pad(data []byte) []byte {
 	dataLen, lastByte := getLenAndLastByte(data)
 
