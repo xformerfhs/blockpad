@@ -89,93 +89,93 @@ It shows how a block cipher and a padder would typically be used for encryption 
 package main
 
 import (
-	"bytes"
-	"crypto/aes"
-	"crypto/cipher"
-	"github.com/xformerfhs/blockpad"
-	"log"
+   "bytes"
+   "crypto/aes"
+   "crypto/cipher"
+   "github.com/xformerfhs/blockpad"
+   "log"
 )
 
 func main() {
-	data := []byte(`Beware the ides of march`)
+   data := []byte(`Beware the ides of march`)
 
-	// ATTENTION: Do not hard-code an encryption key! NEVER!
-	key := []byte{
-		0x7c, 0xa8, 0x69, 0xbc, 0x54, 0xf5, 0x87, 0x99,
-		0xf3, 0x89, 0x09, 0xab, 0x33, 0xfb, 0xdb, 0x5c,
-		0x84, 0x09, 0x4c, 0x05, 0x23, 0xc1, 0xb1, 0x07,
-		0xa5, 0xea, 0x5d, 0xf7, 0xf5, 0x42, 0x77, 0x42,
-	}
+   // ATTENTION: Do not hard-code an encryption key! NEVER!
+   key := []byte{
+      0x7c, 0xa8, 0x69, 0xbc, 0x54, 0xf5, 0x87, 0x99,
+      0xf3, 0x89, 0x09, 0xab, 0x33, 0xfb, 0xdb, 0x5c,
+      0x84, 0x09, 0x4c, 0x05, 0x23, 0xc1, 0xb1, 0x07,
+      0xa5, 0xea, 0x5d, 0xf7, 0xf5, 0x42, 0x77, 0x42,
+   }
 
-	// ATTENTION: Never use a constant initialization vector! NEVER!
-	iv := []byte{
-		0x11, 0x42, 0xcd, 0x7d, 0xf9, 0x98, 0x46, 0x4d,
-		0xd8, 0x58, 0xdd, 0x4e, 0xc8, 0x3b, 0xfd, 0xe9,
-	}
+   // ATTENTION: Never use a constant initialization vector! NEVER!
+   iv := []byte{
+      0x11, 0x42, 0xcd, 0x7d, 0xf9, 0x98, 0x46, 0x4d,
+      0xd8, 0x58, 0xdd, 0x4e, 0xc8, 0x3b, 0xfd, 0xe9,
+   }
 
-	// 1. Create block cipher.
-	aesCipher, err := aes.NewCipher(key)
-	if err != nil {
-		log.Fatalf(`Could not create AES cipher: %v`, err)
-	}
+   // 1. Create block cipher.
+   aesCipher, err := aes.NewCipher(key)
+   if err != nil {
+      log.Fatalf(`Could not create AES cipher: %v`, err)
+   }
 
-	// 2. Create arbitrary tail byte padder.
-	var padder *blockpad.BlockPad
-	padder, err = blockpad.NewBlockPadding(blockpad.ArbitraryTailByte, aes.BlockSize)
-	if err != nil {
-		log.Fatalf(`Could not create padder: %v`, err)
-	}
+   // 2. Create arbitrary tail byte padder.
+   var padder *blockpad.BlockPad
+   padder, err = blockpad.NewBlockPadding(blockpad.ArbitraryTailByte, aes.BlockSize)
+   if err != nil {
+      log.Fatalf(`Could not create padder: %v`, err)
+   }
 
-	// 3. Encrypt the data with a unique iv for every encryption.
-	var encryptedData []byte
-	encryptedData, err = doEncryption(aesCipher, iv, padder, data)
-	if err != nil {
-		log.Fatalf(`Encryption failed: %v`, err)
-	}
+   // 3. Encrypt the data with a unique iv for every encryption.
+   var encryptedData []byte
+   encryptedData, err = doEncryption(aesCipher, iv, padder, data)
+   if err != nil {
+      log.Fatalf(`Encryption failed: %v`, err)
+   }
 
-	// 4. Decrypt the encrypted data.
-	var decryptedData []byte
-	decryptedData, err = doDecryption(aesCipher, iv, padder, encryptedData)
+   // 4. Decrypt the encrypted data.
+   var decryptedData []byte
+   decryptedData, err = doDecryption(aesCipher, iv, padder, encryptedData)
 
-	// 5. Check result.
-	if bytes.Compare(data, decryptedData) == 0 {
-		log.Print(`Success!`)
-	} else {
-		log.Fatalf(`Decrypted data '%02x' does not match clear data '%02x'`, decryptedData, data)
-	}
+   // 5. Check result.
+   if bytes.Compare(data, decryptedData) == 0 {
+      log.Print(`Success!`)
+   } else {
+      log.Fatalf(`Decrypted data '%02x' does not match clear data '%02x'`, decryptedData, data)
+   }
 }
 
 // doEncryption encrypts a slice of data.
 func doEncryption(blockCipher cipher.Block, iv []byte, padder *blockpad.BlockPad, clearData []byte) ([]byte, error) {
-	// 1. Create block mode from cipher.
-	encrypter := cipher.NewCBCEncrypter(blockCipher, iv)
+   // 1. Create block mode from cipher.
+   encrypter := cipher.NewCBCEncrypter(blockCipher, iv)
 
-	// 2. Pad clear data.
-	paddedData := padder.Pad(clearData)
+   // 2. Pad clear data.
+   paddedData := padder.Pad(clearData)
 
-	// 3. Encrypt padded data.
-	// After this, paddedData contains the encrypted padded data.
-	encrypter.CryptBlocks(paddedData, paddedData)
+   // 3. Encrypt padded data.
+   // After this, paddedData contains the encrypted padded data.
+   encrypter.CryptBlocks(paddedData, paddedData)
 
-	return paddedData, nil
+   return paddedData, nil
 }
 
 // doDecryption decrypts a slice of data.
 func doDecryption(blockCipher cipher.Block, iv []byte, padder *blockpad.BlockPad, encryptedData []byte) ([]byte, error) {
-	// 1. Create block mode from cipher.
-	decrypter := cipher.NewCBCDecrypter(blockCipher, iv)
+   // 1. Create block mode from cipher.
+   decrypter := cipher.NewCBCDecrypter(blockCipher, iv)
 
-	// 2. Decrypt padded data.
-	decryptedData := make([]byte, len(encryptedData))
-	decrypter.CryptBlocks(decryptedData, encryptedData)
+   // 2. Decrypt padded data.
+   decryptedData := make([]byte, len(encryptedData))
+   decrypter.CryptBlocks(decryptedData, encryptedData)
 
-	// 3. Unpad padded data.
-	unpaddedData, err := padder.Unpad(decryptedData)
-	if err != nil {
-		return nil, err
-	}
+   // 3. Unpad padded data.
+   unpaddedData, err := padder.Unpad(decryptedData)
+   if err != nil {
+      return nil, err
+   }
 
-	return unpaddedData, nil
+   return unpaddedData, nil
 }
 ```
 
