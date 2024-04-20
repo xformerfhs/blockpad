@@ -24,8 +24,9 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"fmt"
 	"github.com/xformerfhs/blockpad"
-	"log"
+	"os"
 )
 
 func Example() {
@@ -48,36 +49,43 @@ func Example() {
 	// 1. Create block cipher.
 	aesCipher, err := aes.NewCipher(key)
 	if err != nil {
-		log.Fatalf(`Could not create AES cipher: %v`, err)
+		fmt.Printf(`Could not create AES cipher: %v`, err)
+		os.Exit(1)
 	}
 
 	// 2. Create arbitrary tail byte padder.
 	var padder *blockpad.BlockPad
 	padder, err = blockpad.NewBlockPadding(blockpad.ArbitraryTailByte, aes.BlockSize)
 	if err != nil {
-		log.Fatalf(`Could not create padder: %v`, err)
+		fmt.Printf(`Could not create padder: %v`, err)
+		os.Exit(1)
 	}
 
 	// 3. Encrypt the data with a unique iv for every encryption.
 	var encryptedData []byte
 	encryptedData, err = doEncryption(aesCipher, iv, padder, data)
 	if err != nil {
-		log.Fatalf(`Encryption failed: %v`, err)
+		fmt.Printf(`Encryption failed: %v`, err)
+		os.Exit(1)
 	}
 
 	// 4. Decrypt the encrypted data.
 	var decryptedData []byte
 	decryptedData, err = doDecryption(aesCipher, iv, padder, encryptedData)
 	if err != nil {
-		log.Fatalf(`Decryption failed: %v`, err)
+		fmt.Printf(`Decryption failed: %v`, err)
+		os.Exit(1)
 	}
 
 	// 5. Check result.
 	if bytes.Equal(data, decryptedData) {
-		log.Print(`Success!`)
+		fmt.Print(`Success!`)
 	} else {
-		log.Fatalf(`Decrypted data '%02x' does not match clear data '%02x'`, decryptedData, data)
+		fmt.Printf(`Decrypted data '%02x' does not match clear data '%02x'`, decryptedData, data)
+		os.Exit(1)
 	}
+
+	// Output: Success!
 }
 
 // doEncryption encrypts a slice of data.
