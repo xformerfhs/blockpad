@@ -33,24 +33,24 @@ import (
 func zeroFiller(lastByte byte, dataLen int, blockSize int) []byte {
 	padLen, _, pad := makePadSlice(dataLen, blockSize)
 	if lastByte == 0 && padLen != blockSize {
-		panic(`last byte must not be 0`)
+		panic(`last data byte must not be 0`)
 	}
 
-	return pad
+	return pad[:padLen]
 }
 
 // pkcs7Filler creates a filler with all bytes containing the length of the filler.
 func pkcs7Filler(lastByte byte, dataLen int, blockSize int) []byte {
-	_, padLenByte, pad := makePadSlice(dataLen, blockSize)
+	padLen, padLenByte, pad := makePadSlice(dataLen, blockSize)
 	slicehelper.Fill(pad, padLenByte)
-	return pad
+	return pad[:padLen]
 }
 
 // x923Filler contains a filler where the last byte contains the length and all other bytes are zero.
 func x923Filler(lastByte byte, dataLen int, blockSize int) []byte {
 	padLen, padLenByte, pad := makePadSlice(dataLen, blockSize)
 	pad[padLen-1] = padLenByte
-	return pad
+	return pad[:padLen]
 }
 
 // iso10126Filler contains a filler where the last byte contains the length and all other bytes have random values.
@@ -59,40 +59,47 @@ func iso10126Filler(lastByte byte, dataLen int, blockSize int) []byte {
 	lastIndex := padLen - 1
 	pad[lastIndex] = padLenByte
 	_, _ = rand.Read(pad[:lastIndex])
-	return pad
+	return pad[:padLen]
 }
 
 // rfc4303Filler contains a filler where the last byte contains the length and the other bytes are counted down from right to left.
 func rfc4303Filler(lastByte byte, dataLen int, blockSize int) []byte {
-	_, padLenByte, pad := makePadSlice(dataLen, blockSize)
-	for actLen := padLenByte; actLen > 0; actLen-- {
+	padLen, _, pad := makePadSlice(dataLen, blockSize)
+	for actLen := byte(blockSize); actLen > 0; actLen-- {
 		pad[actLen-1] = actLen
 	}
-	return pad
+	return pad[:padLen]
 }
 
 // iso78164Filler contains a filler where the first byte contains the value 0x80 and all other bytes are zero.
 func iso78164Filler(lastByte byte, dataLen int, blockSize int) []byte {
-	_, _, pad := makePadSlice(dataLen, blockSize)
+	padLen, _, pad := makePadSlice(dataLen, blockSize)
 	pad[0] = 0x80
-	return pad
+	return pad[:padLen]
 }
 
 // arbitraryTailByteFiller contains a filler where all bytes contain the same random value which is not the value of the last data byte.
 // This is the *only* padding that is *not* susceptible to a padding oracle!
 func arbitraryTailByteFiller(lastByte byte, dataLen int, blockSize int) []byte {
-	_, _, pad := makePadSlice(dataLen, blockSize)
+	padLen, _, pad := makePadSlice(dataLen, blockSize)
 	slicehelper.Fill(pad, anythingBut(lastByte))
-	return pad
+	return pad[:padLen]
 }
 
 // -------- Helper functions --------
 
+// padLength calculates the length of the pad.
+func padLength(dataLen int, blockSize int) int {
+	return blockSize - dataLen%blockSize
+}
+
 // makePadSlice makes a slice that has the right length to fill the data to a multiple of the block size.
 // If the data length is already a multiple of the block size a full block is returned.
 func makePadSlice(dataLen int, blockSize int) (int, byte, []byte) {
-	padLen := blockSize - dataLen%blockSize
-	pad := make([]byte, padLen)
+	padLen := padLength(dataLen, blockSize)
+	// The pad slice is always the size of one block.
+	// This makes a side channel attack on the timing and the slice size impossible.
+	pad := make([]byte, blockSize)
 	return padLen, byte(padLen), pad
 }
 

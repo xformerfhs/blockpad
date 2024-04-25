@@ -35,9 +35,11 @@ func NewBlockPadding(padAlgorithm PadAlgorithm, blockSize int) (*BlockPad, error
 		return nil, err
 	}
 
+	worker := padImplementation[padAlgorithm]
 	return &BlockPad{
-		worker:    padImplementation[padAlgorithm],
+		worker:    worker,
 		blockSize: blockSize,
+		zeroBlock: make([]byte, blockSize),
 	}, nil
 }
 
@@ -47,9 +49,17 @@ func NewBlockPadding(padAlgorithm PadAlgorithm, blockSize int) (*BlockPad, error
 func (pb *BlockPad) Pad(data []byte) []byte {
 	dataLen, lastByte := getLenAndLastByte(data)
 
-	pad := pb.worker.filler(lastByte, dataLen, pb.blockSize)
+	blockSize := pb.blockSize
 
-	return slicehelper.Concat(data, pad)
+	pad := pb.worker.filler(lastByte, dataLen, blockSize)
+
+	result := slicehelper.Concat(data, pad)
+
+	// Always copy data of one complete block to make timing attacks impossible.
+	// This always fits into pad, so no new allocation is necessary.
+	pad = append(pad, pb.zeroBlock[:blockSize-len(pad)]...)
+
+	return result
 }
 
 // Unpad removes the padding from a byte slice.

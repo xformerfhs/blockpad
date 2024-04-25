@@ -29,7 +29,8 @@ Also, the AEAD modi are sometimes just not feasible, as they can not chain data.
 
 Go has an excellent library of cryptographic primitives.
 Strangely, however, it lacks any support for padding.
-This library fills that gap and provides an easy to use interface for padding and unpadding of data.
+This library fills that gap and provides an easy-to-use interface for padding and unpadding of data.
+Furthermore, padding and unpadding is nearly constant time (see [Appendix](constant-time)).
 
 ## Usage
 
@@ -38,7 +39,7 @@ This is a data structure that is able to pad or unpad data.
 It is created by calling the `NewBlockPad` function:
 
 ```
-   padder, err := NewBlockPad(padAlgorithm, blockSize)
+   padder, err := blockpad.NewBlockPad(padAlgorithm, blockSize)
 ```
 
 `blockSize` is the size of the underlying block cipher's block size.
@@ -50,7 +51,7 @@ It has one of the following values:
 | `Zero`              | [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding) (ISO 10118-1 and ISO 9797-1 method 1) |
 | `PKCS7`             | [PKCS#7 padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#PKCS#5_and_PKCS#7) (RFC 5652)                     |
 | `X923`              | [ANSI X.923](https://en.wikipedia.org/wiki/Padding_(cryptography)#ANSI_X9.23) padding                                   |
-| `ISO10126`          | [ISO 10126](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126) padding                                     |
+| `ISO10126`          | [ISO 10126](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126) padding. This is the fastest to unpad.      |
 | `RFC4303`           | [RFC 4303](https://datatracker.ietf.org/doc/html/rfc4303#section-2.4) padding                                           |
 | `ISO78164`          | [ISO 7816-4](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO/IEC_7816-4) padding (ISO 9797-1 method 2)         |
 | `ArbitraryTailByte` | [Arbitrary tail byte padding](https://eprint.iacr.org/2003/098.pdf)                                                     |
@@ -189,3 +190,54 @@ Frank Schwab ([Mail](mailto:github.sfdhi@slmails.com "Mail"))
 ## License
 
 This source code is published under the [Apache License V2](https://www.apache.org/licenses/LICENSE-2.0.txt).
+
+## Appendix
+
+### Constant time
+
+There exists a class of attacks on encryption that is called [side-channel attacks](https://en.wikipedia.org/wiki/Side-channel_attack).
+These attacks work by observing some physical quantity like the time it takes for an operation to complete, the power consumption of the processor, electromagnetic radiation from the computer board, etc.
+
+A [timing attack](https://en.wikipedia.org/wiki/Timing_attack) is the simplest of these attacks.
+In this case, an external attacker can determine from the processing time of the padding or unpadding how many bytes of the last block are padded.
+This is valuable information that can help to determine the type of data.
+
+In order to thwart this attack all padding and unpadding in this package has been built to use nearly constant-time regardless of the padding lengths.
+
+How does this affect padding and unpadding time?
+Here are some measurements that were taken on the development machine.
+
+All measurements used a block size of 16 bytes, as it is the one most frequently used.
+
+First, there are the padding times in nanoseconds:
+
+| Type             | 1 byte (ns) | 15 bytes (ns) |
+|------------------|-------------|---------------|
+| No constant time | 101         | 138           |
+| Constant time    | 112         | 113           |
+
+The times for 1 byte padding and 15 bytes padding are clearly distinguishable.
+They differ by 37%.
+With the constant time processing there is nearly no difference.
+
+Next, there are the unpadding times in nanoseconds.
+"SFI" means "straight-forward implementation", i.e. non-constant time.
+"CTI" means "constant time implementation":
+
+| Type                        | 1 byte SFI (ns) | 15 bytes padding SFI (ns) | 1 byte CTI (ns) | 15 bytes padding CTI (ns) |
+|-----------------------------|-----------------|---------------------------|-----------------|---------------------------|
+| Zero                        | 11              | 20                        | 20              | 20                        |
+| PKCS#7                      | 13              | 20                        | 23              | 23                        |
+| X.923                       | 14              | 19                        | 22              | 23                        |
+| ISO 10126                   | 13              | 13                        | 13              | 13                        |
+| RFC 4303                    | 14              | 23                        | 26              | 27                        |
+| ISO 7816-4                  | 13              | 24                        | 34              | 34                        |
+| Arbitrary tail byte padding | 13              | 22                        | 22              | 23                        |
+
+Here too, the execution times for the non-constant time cases are clearly different.
+The difference is about a 100% most of the time with "ISO 10126" being the only exception!
+
+With constant time processing there is nearly no difference between the 1 byte and the 15 bytes padding.
+
+"ISO 7816-4" unpadding has been slowed down quite a bit by making it constant-time as it is the most difficult padding to parse and the hardest to get constant-time.
+However, we are talking about nanoseconds here, which are not that significant.

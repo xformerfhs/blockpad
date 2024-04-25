@@ -20,24 +20,43 @@
 //
 // Author: Frank Schwab
 //
-// Version: 1.1.0
-//
-// Change history:
-//    2024-02-01: V1.0.0: Created.
-//    2024-03-17: V1.1.0: Add FillToCap.
-//
 
 // Package slicehelper implements useful helper functions for slices.
 package slicehelper
 
+// ******** Private constants ********
+
+// powerFasterThresholdLen is the slice length where a PowerFill begins to be faster than a SimpleFill.
+const powerFasterThresholdLen = 74
+
 // ******** Public functions ********
 
-// Fill fills a slice with a value in an efficient way up to its length.
+// Fill fills a slice with a value in an optimal way up to its length.
 func Fill[S ~[]T, T any](s S, v T) {
+	sLen := len(s)
+	if sLen > 0 {
+		if sLen >= powerFasterThresholdLen {
+			doPowerFill(s, v, sLen)
+		} else {
+			doSimpleFill(s, v, sLen)
+		}
+	}
+}
+
+// SimpleFill fills a slice with a value in a simple way up to its length.
+func SimpleFill[S ~[]T, T any](s S, v T) {
+	sLen := len(s)
+	if sLen > 0 {
+		doSimpleFill(s, v, sLen)
+	}
+}
+
+// PowerFill fills a slice with a value in an efficient way up to its length.
+func PowerFill[S ~[]T, T any](s S, v T) {
 	sLen := len(s)
 
 	if sLen > 0 {
-		doFill(s, v, sLen)
+		doPowerFill(s, v, sLen)
 	}
 }
 
@@ -63,8 +82,15 @@ func Concat[S ~[]T, T any](slices ...S) S {
 
 // ******** Private functions ********
 
-// doFill fills a slice in an efficient way.
-func doFill[S ~[]T, T any](s S, v T, l int) {
+// doSimpleFill fills a slice in a simple way.
+func doSimpleFill[S ~[]T, T any](s S, v T, l int) {
+	for i := 0; i < l; i++ {
+		s[i] = v
+	}
+}
+
+// doPowerFill fills a slice in an efficient way.
+func doPowerFill[S ~[]T, T any](s S, v T, l int) {
 	// Put the value into the first slice element
 	s[0] = v
 

@@ -39,6 +39,7 @@ import "errors"
 type BlockPad struct {
 	worker    implementationInfo
 	blockSize int
+	zeroBlock []byte
 }
 
 // PadAlgorithm is the type that holds pad algorithms.
