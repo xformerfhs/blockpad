@@ -30,7 +30,7 @@ Also, the AEAD modi are sometimes just not feasible, as they can not chain data.
 Go has an excellent library of cryptographic primitives.
 Strangely, however, it lacks any support for padding.
 This library fills that gap and provides an easy-to-use interface for padding and unpadding of data.
-Furthermore, padding and unpadding is nearly constant time (see [Appendix](constant-time)).
+Furthermore, padding and unpadding is nearly constant time (see [Appendix](#constant-time)).
 
 ## Usage
 
