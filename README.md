@@ -68,10 +68,10 @@ It has one of the following values:
 
 This padder has two public function:
 
-| Function                      | Purpose                                                                                                                                                                                                              |
-|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Pad(data) []byte`            | Given a byte slice of data, it returns a new byte slice that contains the data with the padding. The new byte slice has a length that is a multiple of the block size.                                               |
-| `Unpad(data) ([]byte, error)` | Given a byte slice of padded data, it returns a byte slice into the original data with the padding removed. If there is something wrong with the padding, the returned byte slice is `nil` and an error is returned. |
+| Function                        | Purpose                                                                                                                                                                                                              |
+|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Pad([]byte) []byte`            | Given a byte slice of data, it returns a new byte slice that contains the data with the padding. The new byte slice has a length that is a multiple of the block size.                                               |
+| `Unpad([]byte) ([]byte, error)` | Given a byte slice of padded data, it returns a byte slice into the original data with the padding removed. If there is something wrong with the padding, the returned byte slice is `nil` and an error is returned. |
 
 ### Rational
 
@@ -212,9 +212,9 @@ All measurements used a block size of 16 bytes, as it is the one most frequently
 First, there are the padding times in nanoseconds:
 
 | Type             | 1 byte (ns) | 15 bytes (ns) |
-|------------------|-------------|---------------|
-| No constant time | 101         | 138           |
-| Constant time    | 112         | 113           |
+|------------------|:-----------:|:-------------:|
+| No constant time |     101     |      138      |
+| Constant time    |     112     |      113      |
 
 The times for 1 byte padding and 15 bytes padding are clearly distinguishable.
 They differ by 37%.
@@ -225,14 +225,14 @@ Next, there are the unpadding times in nanoseconds.
 "CTI" means "constant time implementation":
 
 | Type                        | 1 byte SFI (ns) | 15 bytes padding SFI (ns) | 1 byte CTI (ns) | 15 bytes padding CTI (ns) |
-|-----------------------------|-----------------|---------------------------|-----------------|---------------------------|
-| Zero                        | 11              | 20                        | 20              | 20                        |
-| PKCS#7                      | 13              | 20                        | 23              | 23                        |
-| X.923                       | 14              | 19                        | 22              | 23                        |
-| ISO 10126                   | 13              | 13                        | 13              | 13                        |
-| RFC 4303                    | 14              | 23                        | 26              | 27                        |
-| ISO 7816-4                  | 13              | 24                        | 34              | 34                        |
-| Arbitrary tail byte padding | 13              | 22                        | 22              | 23                        |
+|-----------------------------|:---------------:|:-------------------------:|:---------------:|:-------------------------:|
+| Zero                        |       11        |            20             |       20        |            20             |
+| PKCS#7                      |       13        |            20             |       23        |            23             |
+| X.923                       |       14        |            19             |       22        |            23             |
+| ISO 10126                   |       13        |            13             |       13        |            13             |
+| RFC 4303                    |       14        |            23             |       26        |            27             |
+| ISO 7816-4                  |       13        |            24             |       34        |            34             |
+| Arbitrary tail byte padding |       13        |            22             |       22        |            23             |
 
 Here too, the execution times for the non-constant time cases are clearly different.
 The difference is about a 100% most of the time with "ISO 10126" being the only exception!
