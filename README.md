@@ -82,7 +82,7 @@ There are two reasons for this:
 1. Performance: The block size and the pad algorithm are checked only once, when the padder is created. With the traditional interface they would have to be checked on every call, which slows down processing by about 30%.
 2. Simplicity: With the creation of a padder the call interface is not cluttered with parameters.
 
-## Example
+## Examples
 
 ### Pad
 
