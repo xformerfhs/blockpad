@@ -46,23 +46,48 @@ func NewBlockPadding(padAlgorithm PadAlgorithm, blockSize int) (*BlockPad, error
 // ******** Public functions ********
 
 // Pad pads a byte slice.
+// It returns a new slice that is a copy of the data with added padding.
+// If the data is large this is inefficient.
+// PadLastBlock contains a more efficient implementation that avoids
+// copying all the data.
 func (pb *BlockPad) Pad(data []byte) []byte {
-	dataLen, lastByte := getLenAndLastByte(data)
+	fullBlockData, lastBlock := pb.PadLastBlock(data)
 
+	return slicehelper.Concat(fullBlockData, lastBlock)
+}
+
+// PadLastBlock pads a byte slice.
+// It returns a byte slice of the data up to the last block
+// and a new slice containing the last block with padding.
+// Only the last data that does not fit into a full block is copied.
+// This is much more efficient than Pad.
+func (pb *BlockPad) PadLastBlock(data []byte) ([]byte, []byte) {
+	// 1. Get all kind of lengths.
+	dataLen := len(data)
 	blockSize := pb.blockSize
 
-	pad := pb.worker.filler(lastByte, dataLen, blockSize)
+	fullBlockDataLen, lastBlockDataLen, padLen := padLengths(dataLen, blockSize)
+	lastBlock := make([]byte, blockSize)
+	lastData := data[fullBlockDataLen:]
 
-	result := slicehelper.Concat(data, pad)
+	// There are two copies. The first one copies padLen bytes and the second one lastBlockDataLen bytes.
+	// padLen + lastBlockDataLen = blockSize, so there are always blockSize bytes copied.
 
-	// Always copy data of one complete block to make timing attacks impossible.
-	// This always fits into pad, so no new allocation is necessary.
-	pad = append(pad, pb.zeroBlock[:blockSize-len(pad)]...)
+	// 2. Do some additional - functionally unnecessary - copying to achieve constant time.
+	copy(lastBlock, pb.zeroBlock[:padLen]) // This copies padLen bytes.
 
-	return result
+	// 3. Build a full block of filler bytes to help achieve constant-time processing.
+	pb.worker.filler(lastBlock, blockSize, lastData, lastBlockDataLen, padLen)
+
+	// 4. Finally, copy last data to last block.
+	copy(lastBlock, lastData[:lastBlockDataLen]) // This copies lastBlockDataLen bytes. lastBlockDataLen + padLen = blockSize.
+
+	return data[:fullBlockDataLen], lastBlock
 }
 
 // Unpad removes the padding from a byte slice.
+// It returns a byte slice into the supplied data and does not allocate a new slice.
+// If a last block is unpadded it returns a zero-length slice if that last block contains only padding.
 func (pb *BlockPad) Unpad(data []byte) ([]byte, error) {
 	dataLen := len(data)
 	if dataLen%pb.blockSize != 0 {
@@ -76,4 +101,18 @@ func (pb *BlockPad) Unpad(data []byte) ([]byte, error) {
 // It implements the Stringer interface.
 func (pb *BlockPad) String() string {
 	return pb.worker.name
+}
+
+// ******** Private functions ********
+
+// padLengths calculates the 3 lengths needed for padding.
+// It returns the length of full data blocks, the length of the last data block
+// and the length of the padding needed.
+func padLengths(dataLen int, blockSize int) (int, int, int) {
+	fullBlockCount := dataLen / blockSize
+	fullBlockDataLen := fullBlockCount * blockSize
+	lastBlockDataLen := dataLen - fullBlockDataLen
+	padLen := blockSize - lastBlockDataLen
+
+	return fullBlockDataLen, lastBlockDataLen, padLen
 }

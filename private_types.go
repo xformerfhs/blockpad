@@ -25,7 +25,7 @@ package blockpad
 // ******** Private types ********
 
 // fillerFunc is the type of a filler function.
-type fillerFunc func(byte, int, int) []byte
+type fillerFunc func([]byte, int, []byte, int, int)
 
 // removerFunc is the type of a remover function.
 type removerFunc func([]byte, int, int) ([]byte, error)

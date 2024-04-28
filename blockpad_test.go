@@ -89,6 +89,41 @@ func TestPadAllParallel(t *testing.T) {
 	}
 }
 
+func TestPadLastBlockAllSequential(t *testing.T) {
+	for padType := Zero; padType <= maxAlgorithm; padType++ {
+		padder, err := NewBlockPadding(padType, testBlockSize)
+		if err != nil {
+			t.Fatalf(`Error creating BlockPad with pad type %d: %v`, padType, err)
+		}
+
+		for i := 0; i < loopCount; i++ {
+			dataLen, data := makeZeroSafeRandomLenTestSlice(padType)
+
+			doPadAndUnpadLastBlock(t, padder, data, dataLen)
+		}
+	}
+}
+
+func TestPadLastBlockAllParallel(t *testing.T) {
+	var wg sync.WaitGroup
+
+	for padType := Zero; padType <= maxAlgorithm; padType++ {
+		padder, err := NewBlockPadding(padType, testBlockSize)
+		if err != nil {
+			t.Fatalf(`Error creating BlockPad with pad type %d: %v`, padType, err)
+		}
+
+		for i := 0; i < parallelCount; i++ {
+			dataLen, data := makeZeroSafeRandomLenTestSlice(padType)
+
+			wg.Add(1)
+			go doPadAndUnpadLastBlockParallel(t, &wg, padder, data, dataLen)
+		}
+
+		wg.Wait()
+	}
+}
+
 func TestPadZeroLength(t *testing.T) {
 	for padType := Zero; padType <= maxAlgorithm; padType++ {
 		padder, err := NewBlockPadding(padType, testBlockSize)
@@ -428,17 +463,24 @@ func doPadAndUnpad(t *testing.T, padder *BlockPad, data []byte, dataLen int) {
 	}
 }
 
-// ******** Benchmarks ********
+// doPadAndUnpadLastBlockParallel runs a pad/unpad last block test in a Go routine.
+func doPadAndUnpadLastBlockParallel(t *testing.T, wg *sync.WaitGroup, padder *BlockPad, data []byte, dataLen int) {
+	defer wg.Done()
+	doPadAndUnpadLastBlock(t, padder, data, dataLen)
+}
 
-func BenchmarkMethodPad(b *testing.B) {
-	b.StopTimer()
-	_, data := makeFixedLenTestSlice(testBlockSize*5 + 1)
-	padder, err := NewBlockPadding(PKCS7, testBlockSize)
+// doPadAndUnpad runs a pad/unpad last block test.
+func doPadAndUnpadLastBlock(t *testing.T, padder *BlockPad, data []byte, dataLen int) {
+	fullData, paddedLastBlock := padder.PadLastBlock(data)
+	lastData := data[len(fullData):]
+
+	unpaddedLastBlock, err := padder.Unpad(paddedLastBlock)
 	if err != nil {
-		b.Fatalf(`padder creation failed: %v`, err)
+		t.Fatalf(`%s: UnpadLastBlock failed (dataLen=%d): %v`, padder.String(), dataLen, err)
 	}
-	b.StartTimer()
-	for i := 0; i < b.N; i++ {
-		_ = padder.Pad(data)
+	if !bytes.Equal(unpaddedLastBlock, lastData) {
+		t.Fatalf("%s: unpaddedData != data:\n        data=%02x\n  paddedData=%02x\nunpaddedData=%02x",
+			padder.String(),
+			data, paddedLastBlock, unpaddedLastBlock)
 	}
 }

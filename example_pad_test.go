@@ -29,7 +29,7 @@ import (
 	"os"
 )
 
-func Example() {
+func ExampleBlockPad_Pad() {
 	data := []byte(`Beware the ides of march`)
 
 	// ATTENTION: Do not hard-code an encryption key! NEVER!
@@ -63,7 +63,7 @@ func Example() {
 
 	// 3. Encrypt the data with a unique iv for every encryption.
 	var encryptedData []byte
-	encryptedData, err = doEncryption(aesCipher, iv, padder, data)
+	encryptedData, err = doEncryptionWithPad(aesCipher, iv, padder, data)
 	if err != nil {
 		fmt.Printf(`Encryption failed: %v`, err)
 		os.Exit(1)
@@ -71,7 +71,7 @@ func Example() {
 
 	// 4. Decrypt the encrypted data.
 	var decryptedData []byte
-	decryptedData, err = doDecryption(aesCipher, iv, padder, encryptedData)
+	decryptedData, err = doDecryptionWithPad(aesCipher, iv, padder, encryptedData)
 	if err != nil {
 		fmt.Printf(`Decryption failed: %v`, err)
 		os.Exit(1)
@@ -88,8 +88,15 @@ func Example() {
 	// Output: Success!
 }
 
-// doEncryption encrypts a slice of data.
-func doEncryption(blockCipher cipher.Block, iv []byte, padder *blockpad.BlockPad, clearData []byte) ([]byte, error) {
+// ******** Private functions ********
+
+// doEncryptionWithPad encrypts a slice of data.
+func doEncryptionWithPad(
+	blockCipher cipher.Block,
+	iv []byte,
+	padder *blockpad.BlockPad,
+	clearData []byte,
+) ([]byte, error) {
 	// 1. Create block mode from cipher.
 	encrypter := cipher.NewCBCEncrypter(blockCipher, iv)
 
@@ -103,8 +110,13 @@ func doEncryption(blockCipher cipher.Block, iv []byte, padder *blockpad.BlockPad
 	return paddedData, nil
 }
 
-// doDecryption decrypts a slice of data.
-func doDecryption(blockCipher cipher.Block, iv []byte, padder *blockpad.BlockPad, encryptedData []byte) ([]byte, error) {
+// doDecryptionWithPad decrypts a slice of data.
+func doDecryptionWithPad(
+	blockCipher cipher.Block,
+	iv []byte,
+	padder *blockpad.BlockPad,
+	encryptedData []byte,
+) ([]byte, error) {
 	// 1. Create block mode from cipher.
 	decrypter := cipher.NewCBCDecrypter(blockCipher, iv)
 

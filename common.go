@@ -39,34 +39,6 @@ var padImplementation = []implementationInfo{
 
 // ******** Private functions ********
 
-// getLenAndLastByteAndCheckBlockSize gets the length and the last byte of the data and
-// checks if the block size is valid.
-func getLenAndLastByteAndCheckBlockSize(blockSize int, data []byte) (int, byte, error) {
-	err := checkBlockSize(blockSize)
-	if err != nil {
-		return 0, 0, err
-	}
-
-	dataLen, lastByte := getLenAndLastByte(data)
-	return dataLen, lastByte, nil
-}
-
-// getLenAndLastByte gets the length and the last byte of the data.
-func getLenAndLastByte(data []byte) (int, byte) {
-	dataLen := len(data)
-	var lastByte byte
-
-	if dataLen != 0 {
-		lastByte = data[dataLen-1]
-	} else {
-		// This can be any value, except 0, because this is an invalid value for zero padding.
-		// It is not used for anything.
-		lastByte = 0xff
-	}
-
-	return dataLen, lastByte
-}
-
 // checkPadAlgorithmAndBlockSize checks if the pad algorithm and the block size are valid.
 func checkPadAlgorithmAndBlockSize(padAlgorithm PadAlgorithm, blockSize int) error {
 	err := checkBlockSize(blockSize)
