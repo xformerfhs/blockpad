@@ -2,6 +2,9 @@
 
 A [Go](https://go.dev) package for block cipher paddings.
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/xformerfhs/blockpad.svg)](https://pkg.go.dev/github.com/xformerfhs/blockpad)
+[![Go Report Card](https://goreportcard.com/badge/github.com/xformerfhs/blockpad)](https://goreportcard.com/report/github.com/xformerfhs/blockpad)
+
 ## Introduction
 
 One type of encryption is the so-called [block cipher](https://en.wikipedia.org/wiki/Block_cipher).
