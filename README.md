@@ -88,6 +88,7 @@ There are two reasons for this:
 
 In this example a very simple main program calls an encryption and a decryption function.
 It shows how a block cipher and a padder would typically be used for encryption and decryption.
+The `Pad` function is used for padding.
 
 ```go
 package main
@@ -192,6 +193,7 @@ func doDecryption(blockCipher cipher.Block, iv []byte, padder *blockpad.BlockPad
 
 In this example a very simple main program calls an encryption and a decryption function.
 It shows how a block cipher and a padder would typically be used for encryption and decryption.
+The `PadLastBlock` function is used for padding.
 
 ```go
 package main
