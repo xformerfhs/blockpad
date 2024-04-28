@@ -31,6 +31,7 @@ Go has an excellent library of cryptographic primitives.
 Strangely, however, it lacks any support for padding.
 This library fills that gap and provides an easy-to-use interface for padding and unpadding of data.
 Furthermore, padding and unpadding is nearly constant time to thwart [timing attacks]((https://en.wikipedia.org/wiki/Timing_attack)).
+See the [MEASUREMENTS](MEASUREMENTS.md) file for execution time measurements.
 
 ## Usage
 
