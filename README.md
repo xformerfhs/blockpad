@@ -4,6 +4,8 @@ A [Go](https://go.dev) package for block cipher paddings.
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/xformerfhs/blockpad.svg)](https://pkg.go.dev/github.com/xformerfhs/blockpad)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xformerfhs/blockpad)](https://goreportcard.com/report/github.com/xformerfhs/blockpad)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/xformerfhs/blockpad)](https://github.com/xformerfhs/blockpad/releases)
+[![License](https://img.shields.io/github/license/xformerfhs/blockpad)](https://github.com/xformerfhs/blockpad/blob/main/LICENSE)
 
 ## Introduction
 
