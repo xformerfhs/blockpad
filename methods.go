@@ -70,7 +70,7 @@ func (pb *BlockPad) PadLastBlock(data []byte) ([]byte, []byte) {
 	lastBlock := make([]byte, blockSize)
 	lastData := data[fullBlockDataLen:]
 
-	// There are two copies. The first one copies padLen bytes and the second one lastBlockDataLen bytes.
+	// There are two copy operations. The first one copies padLen bytes and the second one lastBlockDataLen bytes.
 	// padLen + lastBlockDataLen = blockSize, so there are always blockSize bytes copied.
 
 	// 2. Do some additional - functionally unnecessary - copying to achieve constant time.
