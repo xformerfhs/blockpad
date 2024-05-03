@@ -1,0 +1,28 @@
+{
+   "format": 1,
+   "contextId": "blockpad_v1.2.0",
+   "publicKey": "2f5hr62QvFxw7H85xxGXjwj2QGQJmjqpw4vV9H8fCv5JV9Qj9cVR",
+   "timestamp": "2024-05-03 12:38:37 +02:00",
+   "hostname": "Jetzt",
+   "signatureType": 1,
+   "fileSignatures": {
+      ".gitattributes": "wRHpgPhjr5jFM9QHvQjCJxp3PmGW5pjMXXfQ5X8pjgfHqXmXvFW4rRRp7V6cvRvhwVfvMCMcjjC3RR3QwhccjRX359vc2w95hp5763R",
+      ".gitignore": "fMCJr78Jx7RcR2XfRCgwrMw8xf27CVPF57GGhW82R8P387GGgRrjJx2C2XcH8WgphrmRh72Hq2qwvxR4fJ8hj5WQRJV2G6f2M7w9w3C",
+      "CHANGELOG.md": "xfg85pjWR5fMcCpGj5FC46hFXxmMxJhCrRh5gv9cGRPX9jgqWv922jwW9MGxq64Ww7Rj3vgrHJpm5qP7886q3vc8Rjgj29Fwmpxw622",
+      "LICENSE": "JRwg5Jj7XXXxRwVP2R35M7678WXmC2h3GWmPJ6X3Q5MWcMGxJhpw6mwGM4Mcf4Q3hHGwRxgjX7682vVQMHCQQcMHWRfc7frhRrq5c32",
+      "MEASUREMENTS.md": "Hc5WvwV6vHQwGHqcjPJvf4hQVQGqhrvp8jJfWf6mM89CFM3cqpCVR4hgP9f8R9mFfCPr6cp7wMQj36pWHqj23R2cCmWFF8jhMHX8g42",
+      "README.md": "4CM2vCrJ333F3mhCW9JghxgGxfqFc8Qch6f3wvw8xVXcf8WMHvchc9jMc456wmH5C8Vxj6cjJ2hGmf6hrqvwGgr8PxJ8Jrccq4P8J4j",
+      "blockpad.go": "VRWgXVvQpj3PGxmW8GVxqqG9CPp4qXrXGxxwVGgrxcj8mhXc8rrpfqq4qJQGvvVGhCrgj4qx3QjpCJRm74xXCJCWMrm5Q45PxQJQJ4C",
+      "blockpad_test.go": "7JfPCpCmcJMV6xXHq82gm6vrjC5H4pXj5Wp76fx35PHFC9cCHCvp4Hw3fWqj2fc6HV8rf4h88M9QwgXCXFhcqf8r2qPX76Cg5xgxc42",
+      "common.go": "v6QRphcgV7P2VPcqHPqj7jXh4gxcPhPWJRcvwQJ3MX787CcM725XXvxXHvMhmRGPHQPhRhF99GQrG6WgFhqMQ8GRjjM9vQF4fWrWW2j",
+      "example_pad_test.go": "P9j4fPgRpPF326jw32g8R2vf3RFQxGPw683CQm4QpMHP7JGV64xwffQr8r5qc2hg5VrHqQ2WvFFprmM6XqmV4Q3CgVRQmxp9GWrw852",
+      "example_padlastblock_test.go": "VqvMFrGx278HG2hP83q9QfCqfvPWQwjJR9jQHC87H5X995Qw92fjHj7RjFfgwG6CXW4qV4XPVvcMFhHpxFF9C2jrj5WpFrH2cPvgC4R",
+      "fillers.go": "R683xc2FMwJ5PXw63Wv7jm4Q5hMgXX69Cv42w9cRf5jGxVXX6p9GVPJ3R7G3pr8mgrwGJ93FGm8Pxhc9HVVpWfr9vV3c9f6wqwvH84j",
+      "go.mod": "HqQ8WXVMpjcC2h675RrMFHmG7XJj8J2jgvmr8pXWgFPVrWHCfF6ggG723JxcHGfWPFPJ3H37h5pj8c76h239JmWx37WqG3V9C85gr3C",
+      "go.sum": "RGCg6wpPQ44cqp4VqrV9VhGxR2RXV2C8mj3P6cqxvWWCFwv3r629v5pvQWc2vW7WfHQCj4X57chmg97mM2gFvq2vJm4mPvM6Jrhg252",
+      "methods.go": "RfM6J9W4Hg6352cvWFFr73jcq3M74wgGmc3pgWWP5MPFfFXhgGm2Hgp8xqrfVqp6vhRfRXPQxWPrVWpWPxv8PvG4WqwxGx5jWV49R3j",
+      "private_types.go": "xrVfpwGGPX3qfH6Gg4XVhpC3Xhw7jVFHqQcf7px9F6fhgPVgmVmPHJ8HXMf5WRMRpHPFP6V4crM98Gghrvq9wFRpqvhxpG5RRRwqr52",
+      "removers.go": "mw9XPjc2vrwr46v2Qh4w57J43RWcHfgFM3X44G7FxmcRp2WpJCpHGvF7Mr6w4JPQf93jGqv7HVMqp547vVc8RvVcvg2vC573fHm3R4C"
+   },
+   "dataSignature": "x2pwmpJ3X5chHfC2mFrVRvvWm9XqWfHwx2VCvh7VfM6fgPrmMJhgVwJ9H976F6pXmp8GRf7HMC2jG3gX7w6wvqv7mGr6mv3xC95JC22"
+}

@@ -1,0 +1,9 @@
+This package contains signatures for all source files. 
+They have been signed by filesigner (https://github.com/xformerfhs/filesigner).
+The signatures file is 'filesigner-signatures.json'.
+The files have been signed with the following information:
+
+Context id         : blockpad_v1.2.0
+Public key id      : X8PX-QSTZ-FJHG-DRM3-2TYS-BZTE-1H
+Signature timestamp: 2024-05-03 12:38:37 +02:00
+Signature host name: Jetzt
