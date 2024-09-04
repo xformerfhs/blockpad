@@ -49,10 +49,14 @@ type PadAlgorithm byte
 
 // These are the valid pad algorithms.
 const (
+	// minAlgorithm is a helper constant and always contains the minimum defined padding type constant.
+	// It must always be the first constant in this const block!
+	minAlgorithm PadAlgorithm = 0
+
 	// Zero implements zero padding (ISO 10118-1 and ISO 9797-1 method 1), i.e. zero bytes are appended.
 	// Data to be padded *must not* end with a 0 byte! If it does, the Pad function will panic in this mode.
 	// This padding should only be used with integrity protection as it is susceptible to a padding oracle attack.
-	Zero PadAlgorithm = iota
+	Zero PadAlgorithm = iota - 1
 
 	// PKCS7 implements PKCS#7 padding (RFC 5652).
 	// This padding should only be used with integrity protection as it is susceptible to a padding oracle attack.
@@ -75,12 +79,16 @@ const (
 	ISO78164
 
 	// ArbitraryTailByte implements arbitrary tail byte padding.
-	// This padding is the only one that is *not* susceptible to a padding oracle attack.
+	// This padding is *not* susceptible to a padding oracle attack.
 	ArbitraryTailByte
+
+	// NotLastByte implements not last byte padding.
+	// This padding is *not* susceptible to a padding oracle attack.
+	NotLastByte
 
 	// maxAlgorithm is a helper constant and always contains the maximum defined padding type constant.
 	// It must always be the last constant in this const block!
-	maxAlgorithm = iota - 1
+	maxAlgorithm = iota - 2
 )
 
 // These are the public errors.

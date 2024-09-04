@@ -37,7 +37,7 @@ Next there are the times for the `Unpad` function:
 | X.923                       |   14    |    19     |
 | ISO 10126                   |   13    |    13     |
 | RFC 4303                    |   14    |    23     |
-| ISO 7816-4                  |   13    |    24     |
+| ISO 7816–4                  |   13    |    24     |
 | Arbitrary tail byte padding |   13    |    22     |
 
 Here also the execution times for 1 and 15 bytes padding are clearly distinguishable, except for `ISO 10126` padding.
@@ -51,27 +51,29 @@ First, there is a comparison of the constant-time `Pad` functions:
 
 | Type                        | 1 byte | 15 bytes |
 |-----------------------------|:------:|:--------:|
-| Zero                        |  104   |   103    |
-| PKCS#7                      |  108   |   107    |
-| X.923                       |  102   |   102    |
-| ISO 10126                   |  324   |   318    |
-| RFC 4303                    |  142   |   140    |
-| ISO 7816-4                  |  131   |   127    |
-| Arbitrary tail byte padding |  150   |   153    |
+| Zero                        |   66   |    66    |
+| PKCS#7                      |   71   |    71    |
+| X.923                       |   66   |    65    |
+| ISO 10126                   |  222   |   214    |
+| RFC 4303                    |   76   |    74    |
+| ISO 7816–4                  |   70   |    70    |
+| Arbitrary tail byte padding |   89   |   104    |
+| Not byte padding            |   90   |   106    |
 
 As one can see the execution times for 1 byte and 15 bytes of padding are nearly identical.
 
 Next, there is a comparison of the constant-time `PadLastBlock` functions:
 
-| Type                        |1 byte | 15 bytes |
-|-----------------------------|:-----:|:--------:|
-| Zero                        |  48   |    48    |
-| PKCS#7                      |  55   |    56    |
-| X.923                       |  47   |    47    |
-| ISO 10126                   |  229  |   227    |
-| RFC 4303                    |  55   |    58    |
-| ISO 7816-4                  |  47   |    46    |
-| Arbitrary tail byte padding |  66   |    67    |
+| Type                        | 1 byte | 15 bytes |
+|-----------------------------|:------:|:--------:|
+| Zero                        |   45   |    45    |
+| PKCS#7                      |   51   |    51    |
+| X.923                       |   44   |    44    |
+| ISO 10126                   |  226   |   228    |
+| RFC 4303                    |   51   |    51    |
+| ISO 7816–4                  |   44   |    44    |
+| Arbitrary tail byte padding |   65   |    66    |
+| Not byte padding            |   49   |    50    |
 
 Again, the execution times for 1 byte and 15 bytes of padding are nearly identical.
 
@@ -79,12 +81,13 @@ At last, there are the execution times for the constant-time `Unpad` functions:
 
 | Type                        | 1 byte | 15 bytes |
 |-----------------------------|:------:|:--------:|
-| Zero                        |   19   |    20    |
-| PKCS#7                      |   22   |    23    |
-| X.923                       |   22   |    23    |
-| ISO 10126                   |   11   |    11    |
-| RFC 4303                    |   22   |    23    |
-| ISO 7816-4                  |   29   |    29    |
-| Arbitrary tail byte padding |   18   |    20    |
+| Zero                        |   21   |    23    |
+| PKCS#7                      |   25   |    26    |
+| X.923                       |   26   |    26    |
+| ISO 10126                   |   13   |    13    |
+| RFC 4303                    |   25   |    26    |
+| ISO 7816-4                  |   34   |    44    |
+| Arbitrary tail byte padding |   22   |    23    |
+| Not byte padding            |   22   |    23    |
 
 Again, the execution times for 1 byte and 15 bytes of unpadding are nearly identical.

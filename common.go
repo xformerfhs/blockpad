@@ -35,6 +35,7 @@ var padImplementation = []implementationInfo{
 	{name: `RFC 4303`, filler: rfc4303Filler, remover: rfc4303Remover},
 	{name: `ISO 7816-4`, filler: iso78164Filler, remover: iso78164Remover},
 	{name: `Arbitrary Tail Byte`, filler: arbitraryTailByteFiller, remover: arbitraryTailBytePaddingRemover},
+	{name: `Not Last Byte`, filler: notLastBytePaddingFiller, remover: arbitraryTailBytePaddingRemover},
 }
 
 // ******** Private functions ********

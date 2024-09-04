@@ -55,7 +55,7 @@ const fixedDataLen = testBlockSize + 1
 // ******** Functional tests ********
 
 func TestPadAllSequential(t *testing.T) {
-	for padType := Zero; padType <= maxAlgorithm; padType++ {
+	for padType := minAlgorithm; padType <= maxAlgorithm; padType++ {
 		padder, err := NewBlockPadding(padType, testBlockSize)
 		if err != nil {
 			t.Fatalf(`Error creating BlockPad with pad type %d: %v`, padType, err)
@@ -177,6 +177,7 @@ func TestPadCrossUnpad(t *testing.T) {
 		for otherPadAlgorithm := Zero; otherPadAlgorithm <= maxAlgorithm; otherPadAlgorithm++ {
 			if padAlgorithm != otherPadAlgorithm &&
 				!(padAlgorithm == ArbitraryTailByte || otherPadAlgorithm == ArbitraryTailByte) &&
+				!(padAlgorithm == NotLastByte || otherPadAlgorithm == NotLastByte) &&
 				!((padAlgorithm == PKCS7 || padAlgorithm == X923 || padAlgorithm == RFC4303) && otherPadAlgorithm == ISO10126) &&
 				!(padAlgorithm == ISO78164 && otherPadAlgorithm == Zero) {
 				var otherPadder *BlockPad
@@ -322,7 +323,7 @@ func TestUnpadNoPadding(t *testing.T) {
 	data[len(data)-1] = 0x5a
 
 	for padType := Zero; padType <= maxAlgorithm; padType++ {
-		if padType != ArbitraryTailByte {
+		if padType != ArbitraryTailByte && padType != NotLastByte {
 			padder, err := NewBlockPadding(padType, testBlockSize)
 			if err != nil {
 				t.Fatalf(`Error creating BlockPad with pad type %d: %v`, padType, err)

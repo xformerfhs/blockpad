@@ -67,16 +67,32 @@ func iso78164Filler(lastBlock []byte, blockSize int, lastData []byte, lastBlockD
 }
 
 // arbitraryTailByteFiller contains a filler where all bytes contain the same random value which is not the value of the last data byte.
-// This is the *only* padding that is *not* susceptible to a padding oracle!
+// This padding is *not* susceptible to a padding oracle!
 func arbitraryTailByteFiller(lastBlock []byte, blockSize int, lastData []byte, lastBlockDataLen int, padLen int) {
-	fillByte := getFillByte(lastData, lastBlockDataLen)
+	fillByte := getArbitraryTailBytePaddingFillByte(lastData, lastBlockDataLen)
+	slicehelper.Fill(lastBlock, fillByte)
+}
+
+// notLastBytePaddingFiller contains a filler where all fill bytes contain negated value of the last data byte.
+// It is a simplified version of arbitrary tail byte padding which does not need the expensive creation
+// of a random byte.
+// This padding is *not* susceptible to a padding oracle!
+func notLastBytePaddingFiller(lastBlock []byte, blockSize int, lastData []byte, lastBlockDataLen int, padLen int) {
+	var fillByte byte
+
+	if lastBlockDataLen > 0 {
+		fillByte = ^lastData[lastBlockDataLen-1]
+	} else {
+		fillByte = 0xaa
+	}
+
 	slicehelper.Fill(lastBlock, fillByte)
 }
 
 // -------- Helper functions --------
 
-// getFillByte gets the byte that is used for padding with arbitrary tail byte padding.
-func getFillByte(lastData []byte, lastBlockDataLen int) byte {
+// getArbitraryTailBytePaddingFillByte gets the byte that is used for padding with arbitrary tail byte padding.
+func getArbitraryTailBytePaddingFillByte(lastData []byte, lastBlockDataLen int) byte {
 	var result byte
 
 	if lastBlockDataLen != 0 {
@@ -98,6 +114,19 @@ func anythingBut(notThisByte byte) byte {
 		if result != notThisByte {
 			break
 		}
+	}
+
+	return result
+}
+
+// getArbitraryTailBytePaddingFillByte gets the byte that is used for padding with arbitrary tail byte padding.
+func getNotValueFillByte(lastData []byte, lastBlockDataLen int) byte {
+	var result byte
+
+	if lastBlockDataLen != 0 {
+		result = anythingBut(lastData[lastBlockDataLen-1])
+	} else {
+		result = byte(mrand.Int31n(256)) // Just use any byte value if the last block is padding-only.
 	}
 
 	return result

@@ -1,9 +1,9 @@
-package tests
+package benchmarks
 
 import "crypto/rand"
 
-// dataLen is the minimum data length for tests with random data lengths.
-const dataLen = 128
+// minimumDataLen is the minimum data length for tests with random data lengths.
+const minimumDataLen = 128
 
 // testBlockSize is the block size used in the tests.
 const testBlockSize = 16
