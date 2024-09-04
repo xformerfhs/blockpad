@@ -3,9 +3,9 @@ They have been signed by filesigner (https://github.com/xformerfhs/filesigner).
 The signatures file is 'filesigner-signatures.json'.
 The files have been signed with the following information:
 
-Context id         : blockpad_v1.2.0
-Public key id      : JB68-MKBX-8Q3H-J8KQ-6PDT-FRV2-DR
-Signature timestamp: 2024-08-25 10:53:45 +02:00
+Context id         : blockpad_v1.3.0
+Public key id      : PQCL-K9F0-3QWT-LJQ5-5FHE-921W-TK
+Signature timestamp: 2024-09-04 21:40:30 +02:00
 Signature host name: Jetzt
 
 See https://github.com/xformerfhs/filesigner
