@@ -4,8 +4,8 @@ The signatures file is 'filesigner-signatures.json'.
 The files have been signed with the following information:
 
 Context id         : blockpad_v1.3.0
-Public key id      : PQCL-K9F0-3QWT-LJQ5-5FHE-921W-TK
-Signature timestamp: 2024-09-04 21:40:30 +02:00
+Public key id      : LXW1-W94Z-WKYP-J64D-5MCD-4SGK-2D
+Signature timestamp: 2024-09-05 19:40:02 +02:00
 Signature host name: Jetzt
 
 See https://github.com/xformerfhs/filesigner

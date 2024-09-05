@@ -118,16 +118,3 @@ func anythingBut(notThisByte byte) byte {
 
 	return result
 }
-
-// getArbitraryTailBytePaddingFillByte gets the byte that is used for padding with arbitrary tail byte padding.
-func getNotValueFillByte(lastData []byte, lastBlockDataLen int) byte {
-	var result byte
-
-	if lastBlockDataLen != 0 {
-		result = anythingBut(lastData[lastBlockDataLen-1])
-	} else {
-		result = byte(mrand.Int31n(256)) // Just use any byte value if the last block is padding-only.
-	}
-
-	return result
-}
